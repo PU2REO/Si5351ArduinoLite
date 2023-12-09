@@ -1,6 +1,6 @@
 Si5351A (10 MSOP - 3 Clocks Only) Lite Library for Arduino
 ==========================
-This is a library for the Si5351 series of clock generator ICs from [Skyworks Solutions](https://www.skyworksinc.com/) for the Arduino development environment. It will allow you to control the Si5351 with an Arduino, and without depending on the proprietary ClockBuilder software from SkyWorks (ex Silicon Labs).
+This is a library for the Si5351A (10 MSOP - 3 Clocks Only) series of clock generator ICs from [Skyworks Solutions](https://www.skyworksinc.com/) for the Arduino development environment. It will allow you to control the Si5351 with an Arduino, and without depending on the proprietary ClockBuilder software from SkyWorks (ex Silicon Labs).
 
 This library is focused towards usage in RF/amateur radio applications, but it may be useful in other cases. However, keep in mind that coding decisions are and will be made with those applications in mind first, so if you need something a bit different, please do fork this repository.
 
@@ -16,15 +16,15 @@ Install the library in the old way, since it's not available at library manager 
 
 Hardware Requirements and Setup
 -------------------------------
-This library has been written for the Arduino platform and has been successfully tested on the Arduino Nano Chinese Clone. There should be no reason that it would not work on any other Arduino hardware with I2C support.
+This library has been written for the Arduino platform and has been successfully tested on one [Arduino Nano Chinese Clone](https://www.google.com/search?q=aliexpress+arduino+nano). There should be no reason that it would not work on any other Arduino hardware with I2C support.
 
-For the Si5351, I used one of that cheap chinese modules plenty available on [AliExpress](https://www.google.com/search?q=aliexpress+Si5351).
+For the Si5351A, I used one of that [cheap chinese plug and play modules](https://www.google.com/search?q=aliexpress+Si5351) plenty available on the net.
 
 Example
 -------
-First, install the Si5351Arduino library into your instance of the Arduino IDE as described above.
+First, install the Si5351ArduinoLite library into your instance of the Arduino IDE as described above.
 
-There is a simple example named **si5351_example.ino** that is placed in your examples menu under the Si5351Arduino folder. Open this to see how to initialize the Si5351 and set a couple of the outputs to different frequencies. The commentary below will analyze the sample sketch.
+There is a simple example named **si5351_example.ino** that is placed in your examples menu under the Si5351ArduinoLite folder. Open this to see how to initialize the Si5351 and set a couple of the outputs to different frequencies. The commentary below will analyze the sample sketch.
 
 Before you do anything with the Si5351, you will need to include the "si5351.h" and "Wire.h" header files and instantiate the Si5351 class.
 
@@ -638,7 +638,7 @@ Interrupt register:
 
 Raw Commands
 ------------
-If you need to read and write raw data to the Si5351, there is public access to the library's _read()_, _write()_, and _write_bulk()_ methods.
+If you need to read and write raw data to the Si5351A, there is public access to the library's _read()_, _write()_, and _write_bulk()_ methods.
 
 Unsupported Features
 --------------------
