@@ -1,6 +1,6 @@
 Si5351A (10 MSOP - 3 Clocks Only) Lite Library for Arduino
 ==========================
-This is a library for the Si5351 series of clock generator ICs from [Skyworks Solutions](https://www.skyworksinc.com/) for the Arduino development environment. It will allow you to control the Si5351 with an Arduino, and without depending on the proprietary ClockBuilder software from SkyWorks (ex Silicon Labs)..
+This is a library for the Si5351 series of clock generator ICs from [Skyworks Solutions](https://www.skyworksinc.com/) for the Arduino development environment. It will allow you to control the Si5351 with an Arduino, and without depending on the proprietary ClockBuilder software from SkyWorks (ex Silicon Labs).
 
 This library is focused towards usage in RF/amateur radio applications, but it may be useful in other cases. However, keep in mind that coding decisions are and will be made with those applications in mind first, so if you need something a bit different, please do fork this repository.
 
@@ -12,17 +12,13 @@ If you would like to support my library development efforts, just give it a good
 
 Library Installation
 ---------------------
-Install the library in the old way, since it's not available at library manager yet: download a copy of the library in a ZIP file. Download a ZIP file of the library from the GitHub repository by using the "Download ZIP" button at the right of the main repository page. Extract the ZIP file, then rename the unzipped folder as "Si5351". Finally, open the Arduino IDE, select menu Sketch > Import Library... > Add Library..., and select the renamed folder that you just downloaded. Restart the IDE and you should have access to the new library.
+Install the library in the old way, since it's not available at library manager yet: Download a ZIP file of the library from the GitHub repository by using the "Download ZIP" button at the right of the main repository page. Extract the ZIP file, then rename the unzipped folder as "Si5351_Lite". Finally, open the Arduino IDE, select menu Sketch > Import Library... > Add Library..., and select the renamed folder that you just downloaded. Restart the IDE and you should have access to the new library.
 
 Hardware Requirements and Setup
 -------------------------------
-This library has been written for the Arduino platform and has been successfully tested on the Arduino Uno and an Uno clone. There should be no reason that it would not work on any other Arduino hardware with I2C support.
+This library has been written for the Arduino platform and has been successfully tested on the Arduino Nano Chinese Clone. There should be no reason that it would not work on any other Arduino hardware with I2C support.
 
-The Si5351 is a +3.3 V only part, so if you are not using a +3.3 V microcontroller, be sure you have some kind of level conversion strategy.
-
-Wire the SDA and SCL pins of the Si5351 to the corresponding pins on the Arduino. Use the pin assignments posted on the [Arduino Wire library page](http://arduino.cc/en/Reference/Wire). Since the I2C interface is set to 100 kHz, use 1 to 10 k&Omega; pullup resistors from +3.3 V to the SDA and SCL lines.
-
-Connect a 25 MHz or 27 MHz crystal with a load capacitance of 6, 8, or 10 pF to the Si5351 XA and XB pins. Locate the crystal as close to the Si5351 as possible and keep the traces as short as possible. Please use a SMT crystal. A crystal with leads will have too much stray capacitance.
+For the Si5351, I used one of that cheap chinese modules plenty available on [AliExpress](https://www.google.com/search?q=aliexpress+Si5351).
 
 Example
 -------
@@ -654,8 +650,6 @@ Changelog
 * v1.0.0
 
     * Initial release, based on [Si5351Arduino](https://github.com/etherkit/Si5351Arduino)
-
-
 
   [1]: https://www.skyworksinc.com/
   [2]: https://www.etherkit.com
