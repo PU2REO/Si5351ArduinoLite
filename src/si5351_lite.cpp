@@ -5,7 +5,7 @@
  *                           Dana H. Myers <k6jq@comcast.net>
  *
  * Lite Version - WILL RUN FOR CLKs 0 to 2 ONLY, 
- * CopyRight (C) 2019 - 2023 PU2REO Edson <pu2reo_edson@gmail.com>
+ * CopyRight (C) 2019 - 2023 PU2REO Edson <pu2reo.edson@gmail.com>
  *
  * Some tuning algorithms derived from clk-si5351.c in the Linux kernel.
  * Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>
