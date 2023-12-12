@@ -644,6 +644,10 @@ Unsupported Features
 --------------------
 This library does not currently support the spread spectrum function of the Si5351.
 
+Thanks to...
+--------------------
+@nt7s, for his excelent library.
+
 Changelog
 ---------
 
