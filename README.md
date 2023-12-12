@@ -646,7 +646,7 @@ This library does not currently support the spread spectrum function of the Si53
 
 Thanks to...
 --------------------
-@nt7s, for his excelent library.
+[NT7S](https://github.com/NT7S/NT7S), for his excelent library.
 
 Changelog
 ---------
