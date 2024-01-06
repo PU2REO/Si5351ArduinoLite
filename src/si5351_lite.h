@@ -4,6 +4,9 @@
  * Copyright (C) 2015 - 2019 Jason Milldrum <milldrum@gmail.com>
  *                           Dana H. Myers <k6jq@comcast.net>
  *
+ * Lite Version - WILL RUN FOR CLKs 0 to 2 ONLY, 
+ * CopyRight (C) 2019 - 2024 PU2REO Edson <pu2reo.edson@gmail.com>
+ *
  * Many defines derived from clk-si5351.h in the Linux kernel.
  * Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>
  * Rabeeh Khoury <rabeeh@solid-run.com>
@@ -301,7 +304,6 @@ public:
 	void set_clock_disable(enum si5351_clock, enum si5351_clock_disable);
 	void set_clock_fanout(enum si5351_clock_fanout, uint8_t);
 	void set_pll_input(enum si5351_pll, enum si5351_pll_input);
-	void set_vcxo(uint64_t, uint8_t);
   void set_ref_freq(uint32_t, enum si5351_pll_input);
 	uint8_t si5351_write_bulk(uint8_t, uint8_t, uint8_t *);
 	uint8_t si5351_write(uint8_t, uint8_t);

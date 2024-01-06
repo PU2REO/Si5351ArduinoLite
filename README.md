@@ -18,7 +18,7 @@ Hardware Requirements and Setup
 -------------------------------
 This library has been written for the Arduino platform and has been successfully tested on one [Arduino Nano Chinese Clone](https://www.google.com/search?q=aliexpress+arduino+nano). There should be no reason that it would not work on any other Arduino hardware with I2C support.
 
-For the Si5351A, I used one of that [cheap chinese plug and play modules](https://www.google.com/search?q=aliexpress+Si5351) plenty available on the net.
+For the Si5351A 10 MSOP, I used one of that [cheap chinese plug and play modules](https://www.google.com/search?q=aliexpress+Si5351) plenty available on the net.
 
 Example
 -------
@@ -67,11 +67,7 @@ The nominal status for each of those flags is a 0. When the program indicates 1,
 
 A Brief Word about the Si5351 Architecture
 ------------------------------------------
-The Si5351 consists of two main stages: two PLLs which are locked to the reference oscillator (a 25/27 MHz crystal) and which can be set from 600 to 900 MHz, and the output (multisynth) clocks which are locked to a PLL of choice and can be set from 500 kHz to 200 MHz (per the datasheet, although it does seem to be possible to set an output up to 225 MHz).
-
-The B variant has an additional VCXO stage with control voltage pin which can be used as a reference synth for a clock output (PLLB must be used as the source for any VCXO output clock).
-
-The C variant is able to take a reference clock input from 10 to 100 MHz separate from the standard crystal reference. If using this reference input, be sure to initialize the library with the correct frequency.
+The Si5351 10 MSOP consists of two main stages: two PLLs which are locked to the reference oscillator (a 25/27 MHz crystal) and which can be set from 600 to 900 MHz, and the output (multisynth) clocks which are locked to a PLL of choice and can be set from 500 kHz to 200 MHz (per the datasheet, although it does seem to be possible to set an output up to 225 MHz).
 
 This library makes PLL assignments based on ease of use. They can be changed manually if needed, although that can introduce complications (see _Manually Selecting a PLL Frequency_ below).
 
@@ -200,8 +196,6 @@ Constraints
 -----------
 * Two multisynths cannot share a PLL with when both outputs are >= 100 MHz. The library will refuse to set another multisynth to a frequency in that range if another multisynth sharing the same PLL is already within that frequency range.
 * Setting phase will be limited in the extreme edges of the output tuning ranges. Because the phase register is 7-bits in size and is denominated in units representing 1/4 the PLL period, not all phases can be set for all output frequencies. For example, if you need a 90&deg; phase shift, the lowest frequency you can set it at is 4.6875 MHz (600 MHz PLL/128).
-* The frequency range of Multisynth 6 and 7 is ~18.45 kHz to 150 MHz. The library assigns PLLB to these two multisynths, so if you choose to use both, then both frequencies must be an even divisor of the PLL frequency (between 6 and 254), so plan accordingly. You can see the current PLLB frequency by accessing the _pllb_freq_ public member.
-* VCXO pull range can be &plusmn;30 to &plusmn;240 ppm
 
 Public Methods
 --------------
@@ -526,18 +520,6 @@ void Si5351::set_clock_fanout(enum si5351_clock_fanout fanout, uint8_t enable)
  */
 void Si5351::set_pll_input(enum si5351_pll pll, enum si5351_pll_input input)
 ```
-### set_vcxo()
-```
-/*
- * set_vcxo(uint64_t pll_freq, uint8_t ppm)
- *
- * pll_freq - Desired PLL base frequency in Hz * 100
- * ppm - VCXO pull limit in ppm
- *
- * Set the parameters for the VCXO on the Si5351B.
- */
-void Si5351::set_vcxo(uint64_t pll_freq, uint8_t ppm)
-```
 ### set_ref_freq()
 ```
 /*
@@ -569,8 +551,8 @@ Public Variables
 ----------------
     struct Si5351Status dev_status;
     struct Si5351IntStatus dev_int_status;
-    enum si5351_pll pll_assignment[8];
-    uint64_t clk_freq[8];
+    enum si5351_pll pll_assignment[SI5351_CLK_MAX];
+    uint64_t clk_freq[SI5351_CLK_MAX];
     uint64_t plla_freq;
     uint64_t pllb_freq;
     uint32_t xtal_freq;
@@ -588,8 +570,7 @@ Crystal load capacitance:
 
 Clock outputs:
 
-    enum si5351_clock {SI5351_CLK0, SI5351_CLK1, SI5351_CLK2, SI5351_CLK3,
-      SI5351_CLK4, SI5351_CLK5, SI5351_CLK6, SI5351_CLK7};
+    enum si5351_clock {SI5351_CLK0, SI5351_CLK1, SI5351_CLK2, SI5351_CLK_MAX};
 
 PLL sources:
 
@@ -646,6 +627,10 @@ This library does not currently support the spread spectrum function of the Si53
 
 Changelog
 ---------
+
+* v1.0.1
+
+    * Removed VCXO part, since it is not available on 10 MSOP version.
 
 * v1.0.0
 

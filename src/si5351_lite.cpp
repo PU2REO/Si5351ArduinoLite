@@ -5,7 +5,7 @@
  *                           Dana H. Myers <k6jq@comcast.net>
  *
  * Lite Version - WILL RUN FOR CLKs 0 to 2 ONLY, 
- * CopyRight (C) 2019 - 2023 PU2REO Edson <pu2reo.edson@gmail.com>
+ * CopyRight (C) 2019 - 2024 PU2REO Edson <pu2reo.edson@gmail.com>
  *
  * Some tuning algorithms derived from clk-si5351.c in the Linux kernel.
  * Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>
@@ -1017,88 +1017,6 @@ void Si5351::set_pll_input(enum si5351_pll pll, enum si5351_pll_input input)
 
 	set_pll(plla_freq, SI5351_PLLA);
 	set_pll(pllb_freq, SI5351_PLLB);
-}
-
-/*
- * set_vcxo(uint64_t pll_freq, uint8_t ppm)
- *
- * pll_freq - Desired PLL base frequency in Hz * 100
- * ppm - VCXO pull limit in ppm
- *
- * Set the parameters for the VCXO on the Si5351B.
- */
-void Si5351::set_vcxo(uint64_t pll_freq, uint8_t ppm)
-{
-	struct Si5351RegSet pll_reg;
-	uint64_t vcxo_param;
-
-	// Bounds check
-	if(ppm < SI5351_VCXO_PULL_MIN)
-	{
-		ppm = SI5351_VCXO_PULL_MIN;
-	}
-
-	if(ppm > SI5351_VCXO_PULL_MAX)
-	{
-		ppm = SI5351_VCXO_PULL_MAX;
-	}
-
-	// Set PLLB params
-	vcxo_param = pll_calc(SI5351_PLLB, pll_freq, &pll_reg, ref_correction[pllb_ref_osc], 1);
-
-	// Derive the register values to write
-
-	// Prepare an array for parameters to be written to
-	uint8_t *params = new uint8_t[20];
-	uint8_t i = 0;
-	uint8_t temp;
-
-	// Registers 26-27
-	temp = ((pll_reg.p3 >> 8) & 0xFF);
-	params[i++] = temp;
-
-	temp = (uint8_t)(pll_reg.p3  & 0xFF);
-	params[i++] = temp;
-
-	// Register 28
-	temp = (uint8_t)((pll_reg.p1 >> 16) & 0x03);
-	params[i++] = temp;
-
-	// Registers 29-30
-	temp = (uint8_t)((pll_reg.p1 >> 8) & 0xFF);
-	params[i++] = temp;
-
-	temp = (uint8_t)(pll_reg.p1  & 0xFF);
-	params[i++] = temp;
-
-	// Register 31
-	temp = (uint8_t)((pll_reg.p3 >> 12) & 0xF0);
-	temp += (uint8_t)((pll_reg.p2 >> 16) & 0x0F);
-	params[i++] = temp;
-
-	// Registers 32-33
-	temp = (uint8_t)((pll_reg.p2 >> 8) & 0xFF);
-	params[i++] = temp;
-
-	temp = (uint8_t)(pll_reg.p2  & 0xFF);
-	params[i++] = temp;
-
-	// Write the parameters
-	si5351_write_bulk(SI5351_PLLB_PARAMETERS, i, params);
-
-	delete params;
-
-	// Write the VCXO parameters
-	vcxo_param = ((vcxo_param * ppm * SI5351_VCXO_MARGIN) / 100ULL) / 1000000ULL;
-
-	temp = (uint8_t)(vcxo_param & 0xFF);
-	si5351_write(SI5351_VXCO_PARAMETERS_LOW, temp);
-
-	temp = (uint8_t)((vcxo_param >> 8) & 0xFF);
-	si5351_write(SI5351_VXCO_PARAMETERS_MID, temp);
-
-	temp = (uint8_t)((vcxo_param >> 16) & 0x3F);
-	si5351_write(SI5351_VXCO_PARAMETERS_HIGH, temp);
 }
 
 /*
