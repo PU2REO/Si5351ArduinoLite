@@ -625,6 +625,10 @@ Unsupported Features
 --------------------
 This library does not currently support the spread spectrum function of the Si5351.
 
+Thanks to...
+--------------------
+[NT7S](https://github.com/NT7S/NT7S), for his excelent library.
+
 Changelog
 ---------
 
