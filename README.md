@@ -643,4 +643,4 @@ Changelog
   [1]: https://www.skyworksinc.com/
   [2]: https://www.etherkit.com
 
-![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/PU2REO/Si5351ArduinoLite/total)
+[![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/PU2REO/Si5351ArduinoLite/total)](https://img.shields.io/github/downloads/PU2REO/Si5351ArduinoLite/total)
