@@ -89,14 +89,17 @@ bool Si5351::init(uint8_t xtal_load_c, uint32_t xo_freq, int32_t corr)
 		if (xo_freq != 0)
 		{
 			set_ref_freq(xo_freq, SI5351_PLL_INPUT_XO);
+            set_ref_freq(xo_freq, SI5351_PLL_INPUT_CLKIN);          //Also CLKIN
 		}
 		else
 		{
 			set_ref_freq(SI5351_XTAL_FREQ, SI5351_PLL_INPUT_XO);
+            set_ref_freq(SI5351_XTAL_FREQ, SI5351_PLL_INPUT_CLKIN); //Also CLKIN
 		}
 
 		// Set the frequency calibration for the XO
 		set_correction(corr, SI5351_PLL_INPUT_XO);
+        set_correction(corr, SI5351_PLL_INPUT_CLKIN);
 
 		reset();
 
@@ -1099,7 +1102,7 @@ uint8_t Si5351::si5351_read(uint8_t addr)
 	Wire.write(addr);
 	Wire.endTransmission();
 
-	Wire.requestFrom(i2c_bus_addr, (uint8_t)1, (uint8_t)false);
+	Wire.requestFrom(i2c_bus_addr, (uint8_t)1);
 
 	while(Wire.available())
 	{

@@ -632,6 +632,11 @@ Thanks to...
 Changelog
 ---------
 
+* v1.1.0
+
+    * Fix "Si5351 init does not initialize the ref freq nor corr entries for clkin", thanks to conr2286
+	* Fix bug in read that would hang the micro when using ATtiny3226 (and probably other types of microcontrollers)
+	
 * v1.0.1
 
     * Removed VCXO part, since it is not available on 10 MSOP version.
