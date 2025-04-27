@@ -35,7 +35,7 @@
  * to be referenced to the same PLL.
  */
 
-#include "si5351.h"
+#include "si5351_lite.h"
 #include "Wire.h"
 
 Si5351 si5351;
