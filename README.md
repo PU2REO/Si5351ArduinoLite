@@ -632,6 +632,12 @@ Thanks to...
 Changelog
 ---------
 
+* v1.2.0
+
+    * Removed remaining VCXO code, since it is not available on 10 MSOP version.
+	* Removed unused code/defines.
+	* Code optimization.
+	
 * v1.1.0
 
     * Fix "Si5351 init does not initialize the ref freq nor corr entries for clkin", thanks to conr2286

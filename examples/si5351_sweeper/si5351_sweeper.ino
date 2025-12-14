@@ -40,7 +40,7 @@ unsigned long  stopFreq = 100000000;
 int analogpin = 5;
 int delaytime = 50;
 
-#include <si5351_lite.h>
+#include <si5351.h>
 #include "Wire.h"
 
 Si5351 si5351;

@@ -18,7 +18,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "si5351_lite.h"
+#include "si5351.h"
 #include "Wire.h"
 
 Si5351 si5351;
