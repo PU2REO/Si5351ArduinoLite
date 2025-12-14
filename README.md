@@ -12,7 +12,7 @@ If you would like to support my library development efforts, just give it a good
 
 Library Installation
 ---------------------
-Install the library in the old way, since it's not available at library manager yet: Download a ZIP file of the library from the GitHub repository by using the "Download ZIP" button at the right of the main repository page. Extract the ZIP file, then rename the unzipped folder as "Si5351_Lite". Finally, open the Arduino IDE, select menu Sketch > Import Library... > Add Library..., and select the renamed folder that you just downloaded. Restart the IDE and you should have access to the new library.
+Use ArduinoIDE-s Library Manager and search for Si5351ArduinoLite library.
 
 Hardware Requirements and Setup
 -------------------------------
@@ -655,3 +655,4 @@ Changelog
   [2]: https://www.etherkit.com
 
 [![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/PU2REO/Si5351ArduinoLite/total)](https://img.shields.io/github/downloads/PU2REO/Si5351ArduinoLite/total)
+
