@@ -12,7 +12,7 @@ If you would like to support my library development efforts, just give it a good
 
 Library Installation
 ---------------------
-Use ArduinoIDE-s Library Manager and search for Si5351ArduinoLite library.
+Use ArduinoIDE Library Manager and search for Si5351ArduinoLite library.
 
 Hardware Requirements and Setup
 -------------------------------
@@ -655,4 +655,5 @@ Changelog
   [2]: https://www.etherkit.com
 
 [![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/PU2REO/Si5351ArduinoLite/total)](https://img.shields.io/github/downloads/PU2REO/Si5351ArduinoLite/total)
+
 
