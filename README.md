@@ -632,6 +632,10 @@ Thanks to...
 Changelog
 ---------
 
+* v1.2.1
+
+    * Minor descriptions and ReadMe text changes
+	
 * v1.2.0
 
     * Removed remaining VCXO code, since it is not available on 10 MSOP version.
