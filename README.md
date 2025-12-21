@@ -27,26 +27,32 @@ First, install the Si5351ArduinoLite library into your instance of the Arduino I
 There is a simple example named **si5351_example.ino** that is placed in your examples menu under the Si5351ArduinoLite folder. Open this to see how to initialize the Si5351 and set a couple of the outputs to different frequencies. The commentary below will analyze the sample sketch.
 
 Before you do anything with the Si5351, you will need to include the "si5351.h" and "Wire.h" header files and instantiate the Si5351 class.
-
+```cpp
     #include "si5351_lite.h"
     #include "Wire.h"
 
     Si5351 si5351;
+```
 
 Now in the _Setup()_ function, let's initialize communications with the Si5351, specify the load capacitance of the reference crystal, that we want to use the default reference oscillator frequency of 25 MHz (the second argument of "0" indicates that we want to use the default), and that we will apply no frequency correction at this point (the third argument of "0"):
+```cpp
 
     i2c_found = si5351.init(SI5351_CRYSTAL_LOAD_8PF, 0, 0);
+```
 
 The _init()_ method returns a _bool_ which indicates whether the Arduino can communicate with a device on the I2C bus at the specified address (it does not verify that the device is an actual Si5351, but this is useful for ensuring that I2C communication is working).
 
 Next, let's set the CLK0 output to 14 MHz:
+```cpp
 
     si5351.set_freq(1400000000ULL, SI5351_CLK0);
+```
 
 Frequencies are indicated in units of 0.01 Hz. Therefore, if you prefer to work in 1 Hz increments in your own code, simply multiply each frequency passed to the library by 100ULL (better yet, use the define called _SI5351_FREQ_MULT_ in the header file for this multiplication).
 
 In the main _Loop()_, we use the Serial port to monitor the status of the Si5351, using a method to update a public struct which holds the status bits:
 
+```cpp
     si5351.update_status();
     Serial.print("SYS_INIT: ");
     Serial.print(si5351.dev_status.SYS_INIT);
@@ -58,6 +64,7 @@ In the main _Loop()_, we use the Serial port to monitor the status of the Si5351
     Serial.print(si5351.dev_status.LOS);
     Serial.print("  REVID: ");
     Serial.println(si5351.dev_status.REVID);
+```
 
 When the synthesizers are locked and the Si5351 is working correctly, you'll see an output similar to this one (the REVID may be different):
 
@@ -75,7 +82,7 @@ Setting the Output Frequency
 ----------------------------
 As indicated above, the library accepts and indicates clock and PLL frequencies in units of 0.01 Hz, as an _unsigned long long_ variable type (or _uint64_t_). When entering literal values, append ```ULL``` to make an explicit unsigned long long number to ensure proper tuning. Since many applications won't require sub-Hertz tuning, you may wish to use an _unsigned long_ (or _uint32_t_) variable to hold your tune frequency, then scale it up by multiplying by 100ULL before passing it to the _set_freq()_ method.
 
-Using the _set_freq()_ method is the easiest way to use the library and gives you a wide range of tuning options, but has some constraints in its usage. Outputs CLK0 through CLK5 by default are all locked to PLLA while CLK6 and CLK7 are locked to PLLB. Due to the nature of the Si5351 architecture, there may only be one CLK output among those sharing a PLL which may be set greater than 100 MHz (actually specified at 112.5 MHz by SiLabs, but stability issues have been found at the upper end). Therefore, once one CLK output has been set above 100 MHz, no more CLKs on the same PLL will be allowed to be set greater than 100 MHz (unless the one which is already set is changed to a frequency below this threshold).
+Using the _set_freq()_ method is the easiest way to use the library and gives you a wide range of tuning options, but has some constraints in its usage. Outputs CLK0 through CLK5 by default are all locked to PLLA while CLK6 and CLK7 are locked to PLLB. Due to the nature of the Si5351 architecture, there may only be one CLK output among those sharing a PLL which may be set greater than 100 MHz (actually specified at 112.5 MHz by Skyworks, but stability issues have been found at the upper end). Therefore, once one CLK output has been set above 100 MHz, no more CLKs on the same PLL will be allowed to be set greater than 100 MHz (unless the one which is already set is changed to a frequency below this threshold).
 
 If the above constraints are not suitable, you need glitch-free tuning, or you are counting on multiple clocks being locked to the same reference, you may set the PLL frequency manually then make clock reference assignments to either of the PLLs.
 
@@ -83,7 +90,9 @@ Manually Selecting a PLL Frequency
 ----------------------------------
 Instead of letting the library choose a PLL frequency for your chosen output frequency, you can choose it yourself in the _set_freq_manual()_ method. This method is similar to _set_freq()_, but the second argument is the desired PLL frequency:
 
+```cpp
     si5351.set_freq_manual(19800000000ULL, 79200000000ULL, SI5351_CLK0);
+```
 
 **If you use this method (or the other methods to tweak the PLL and multisynth settings manually), it is very important to remember that the library will no longer properly track the PLL and multisynth settings and that you alone will be responsible for keeping the synths tuned properly. Strange things can happen to your other outputs if they are already in use. Be sure to read the Si5351 datasheet and Silicon Labs AN619 before doing this so that you understand what you are doing.**
 
@@ -99,17 +108,23 @@ Further Details
 ---------------
 If we like we can adjust the output drive power:
 
+```cpp
     si5351.drive_strength(SI5351_CLK0, SI5351_DRIVE_4MA);
+```
 
 The drive strength is the amount of current into a 50&Omega; load. 2 mA roughly corresponds to 3 dBm output and 8 mA is approximately 10 dBm output.
 
 Individual outputs can be turned on and off. In the second argument, use a 0 to disable and 1 to enable:
 
+```cpp
     si5351.output_enable(SI5351_CLK0, 0);
+```
 
 You may invert a clock output signal by using this command:
 
+```cpp
 	si5351.set_clock_invert(SI5351_CLK0, 1);
+```
 
 Calibration
 -----------
@@ -117,7 +132,9 @@ There will be some inherent error in the reference oscillator's actual frequency
 
 The calibration method is called like this:
 
+```cpp
     si5351.set_correction(-6190, SI5351_PLL_INPUT_XO);
+```
 
 However, you may use the third argument in the _init()_ method to specify the frequency correction and may not actually need to use the explict _set_correction()_ method in your code.
 
@@ -137,6 +154,7 @@ If you need a 90 degree phase shift (as in many RF applications), then it is qui
 
 You can see this in action in a sketch in the examples folder called _si5351phase_. It shows how one would set up an I/Q pair of signals at 14.1 MHz.
 
+```cpp
     // We will output 14.1 MHz on CLK0 and CLK1.
     // A PLLA frequency of 705 MHz was chosen to give an even
     // divisor by 14.1 MHz.
@@ -155,7 +173,7 @@ You can see this in action in a sketch in the examples folder called _si5351phas
 
     // We need to reset the PLL before they will be in phase alignment
     si5351.pll_reset(SI5351_PLLA);
-
+```
 
 CLK Output Options
 ------------------
@@ -165,20 +183,26 @@ In most cases, you will most likely end up using the multisynth associated with 
 
 If you choose to use one or more of these output options, you first need to enable the fanout option for that particular signal:
 
+```cpp
     // Enable clock fanout for the XO
     si5351.set_clock_fanout(SI5351_FANOUT_XO, 1);
+```
 
 Once that is done, you can use the _set_clock_source()_ method to choose the output option you desire. Since the CLK outputs by default are turned off, you may need to turn your CLK output on as well:
 
+```cpp
     // Set CLK1 to output the XO signal
     si5351.set_clock_source(SI5351_CLK1, SI5351_CLK_SRC_XTAL);
     si5351.output_enable(SI5351_CLK1, 1);
+```
 
 Alternate I2C Addresses
 -----------------------
 The standard I2C bus address for the Si5351 is 0x60, however there are other ICs in the wild that use alternate bus addresses. In order to accommodate these ICs, the class constructor can be called with the I2C bus address as a parameter, as shown in this example:
 
+```cpp
     Si5351 si5351(0x61);
+```
 
 Startup Conditions
 ------------------
@@ -200,7 +224,7 @@ Constraints
 Public Methods
 --------------
 ### init()
-```
+```cpp
 /*
  * init(uint8_t xtal_load_c, uint32_t ref_osc_freq, int32_t corr)
  *
@@ -220,7 +244,7 @@ Public Methods
 bool Si5351::init(uint8_t xtal_load_c, uint32_t ref_osc_freq, uint32_t ref_osc_freq)
 ```
 ### reset()
-```
+```cpp
 /*
  * reset(void)
  *
@@ -230,7 +254,7 @@ bool Si5351::init(uint8_t xtal_load_c, uint32_t ref_osc_freq, uint32_t ref_osc_f
 void Si5351::reset(void)
 ```
 ### set_freq()
-```
+```cpp
 /*
  * set_freq(uint64_t freq, enum si5351_clock clk)
  *
@@ -243,7 +267,7 @@ void Si5351::reset(void)
 uint8_t Si5351::set_freq(uint64_t freq, enum si5351_clock clk)
 ```
 ### set_freq_manual()
-```
+```cpp
 /*
  * set_freq_manual(uint64_t freq, uint64_t pll_freq, enum si5351_clock clk)
  *
@@ -261,7 +285,7 @@ uint8_t Si5351::set_freq(uint64_t freq, enum si5351_clock clk)
  */
 ```
 ### set_pll()
-```
+```cpp
 /*
  * set_pll(uint64_t pll_freq, enum si5351_pll target_pll)
  *
@@ -274,7 +298,7 @@ uint8_t Si5351::set_freq(uint64_t freq, enum si5351_clock clk)
 void Si5351::set_pll(uint64_t pll_freq, enum si5351_pll target_pll)
 ```
 ### set_ms()
-```
+```cpp
 /*
  * set_ms(enum si5351_clock clk, struct Si5351RegSet ms_reg, uint8_t int_mode, uint8_t r_div, uint8_t div_by_4)
  *
@@ -291,7 +315,7 @@ void Si5351::set_pll(uint64_t pll_freq, enum si5351_pll target_pll)
 void Si5351::set_ms(enum si5351_clock clk, struct Si5351RegSet ms_reg, uint8_t int_mode, uint8_t r_div, uint8_t div_by_4)
 ```
 ### output_enable()
-```
+```cpp
 /*
  * output_enable(enum si5351_clock clk, uint8_t enable)
  *
@@ -303,7 +327,7 @@ void Si5351::set_ms(enum si5351_clock clk, struct Si5351RegSet ms_reg, uint8_t i
 void Si5351::output_enable(enum si5351_clock clk, uint8_t enable)
 ```
 ### drive_strength()
-```
+```cpp
 /*
  * drive_strength(enum si5351_clock clk, enum si5351_drive drive)
  *
@@ -315,9 +339,9 @@ void Si5351::output_enable(enum si5351_clock clk, uint8_t enable)
  *   (use the si5351_drive enum)
  */
 void Si5351::drive_strength(enum si5351_clock clk, enum si5351_drive drive)
-```
+```cpp
 ### update_status()
-```
+```cpp
 /*
  * update_status(void)
  *
@@ -331,7 +355,7 @@ void Si5351::drive_strength(enum si5351_clock clk, enum si5351_drive drive)
 void Si5351::update_status(void)
 ```
 ### set_correction()
-```
+```cpp
 /*
  * set_correction(int32_t corr, enum si5351_pll_input ref_osc)
  *
@@ -361,7 +385,7 @@ void Si5351::update_status(void)
 void Si5351::set_correction(int32_t corr, enum si5351_pll_input ref_osc)
 ```
 ### set_phase()
-```
+```cpp
 /*
  * set_phase(enum si5351_clock clk, uint8_t phase)
  *
@@ -377,7 +401,7 @@ void Si5351::set_correction(int32_t corr, enum si5351_pll_input ref_osc)
 void Si5351::set_phase(enum si5351_clock clk, uint8_t phase)
 ```
 ### get_correction()
-```
+```cpp
 /*
  * get_correction(enum si5351_pll_input ref_osc)
  *
@@ -391,7 +415,7 @@ void Si5351::set_phase(enum si5351_clock clk, uint8_t phase)
 int32_t Si5351::get_correction(enum si5351_pll_input ref_osc)
 ```
 ### pll_reset()
-```
+```cpp
 /*
  * pll_reset(enum si5351_pll target_pll)
  *
@@ -403,7 +427,7 @@ int32_t Si5351::get_correction(enum si5351_pll_input ref_osc)
 void Si5351::pll_reset(enum si5351_pll target_pll)
 ```
 ### set_ms_source()
-```
+```cpp
 /*
  * set_ms_source(enum si5351_clock clk, enum si5351_pll pll)
  *
@@ -417,7 +441,7 @@ void Si5351::pll_reset(enum si5351_pll target_pll)
 void Si5351::set_ms_source(enum si5351_clock clk, enum si5351_pll pll)
 ```
 ### set_int()
-```
+```cpp
 /*
  * set_int(enum si5351_clock clk, uint8_t int_mode)
  *
@@ -430,7 +454,7 @@ void Si5351::set_ms_source(enum si5351_clock clk, enum si5351_pll pll)
 void Si5351::set_int(enum si5351_clock clk, uint8_t enable)
 ```
 ### set_clock_pwr()
-```
+```cpp
 /*
  * set_clock_pwr(enum si5351_clock clk, uint8_t pwr)
  *
@@ -444,7 +468,7 @@ void Si5351::set_int(enum si5351_clock clk, uint8_t enable)
 void Si5351::set_clock_pwr(enum si5351_clock clk, uint8_t pwr)
 ```
 ### set_clock_invert()
-```
+```cpp
 /*
  * set_clock_invert(enum si5351_clock clk, uint8_t inv)
  *
@@ -457,7 +481,7 @@ void Si5351::set_clock_pwr(enum si5351_clock clk, uint8_t pwr)
 void Si5351::set_clock_invert(enum si5351_clock clk, uint8_t inv)
 ```
 ### set_clock_source()
-```
+```cpp
 /*
  * set_clock_source(enum si5351_clock clk, enum si5351_clock_source src)
  *
@@ -474,7 +498,7 @@ void Si5351::set_clock_invert(enum si5351_clock clk, uint8_t inv)
 void Si5351::set_clock_source(enum si5351_clock clk, enum si5351_clock_source src)
 ```
 ### set_clock_disable()
-```
+```cpp
 /*
  * set_clock_disable(enum si5351_clock clk, enum si5351_clock_disable dis_state)
  *
@@ -490,7 +514,7 @@ void Si5351::set_clock_source(enum si5351_clock clk, enum si5351_clock_source sr
 void Si5351::set_clock_disable(enum si5351_clock clk, enum si5351_clock_disable dis_state)
 ```
 ### set_clock_fanout()
-```
+```cpp
 /*
  * set_clock_fanout(enum si5351_clock_fanout fanout, uint8_t enable)
  *
@@ -507,7 +531,7 @@ void Si5351::set_clock_disable(enum si5351_clock clk, enum si5351_clock_disable 
 void Si5351::set_clock_fanout(enum si5351_clock_fanout fanout, uint8_t enable)
 ```
 ### set_pll_input()
-```
+```cpp
 /*
  * set_pll_input(enum si5351_pll pll, enum si5351_pll_input input)
  *
@@ -521,7 +545,7 @@ void Si5351::set_clock_fanout(enum si5351_clock_fanout fanout, uint8_t enable)
 void Si5351::set_pll_input(enum si5351_pll pll, enum si5351_pll_input input)
 ```
 ### set_ref_freq()
-```
+```cpp
 /*
  * set_ref_freq(uint32_t ref_freq, enum si5351_pll_input ref_osc)
  *
@@ -534,15 +558,15 @@ void Si5351::set_pll_input(enum si5351_pll pll, enum si5351_pll_input input)
 void Si5351::set_ref_freq(uint32_t ref_freq, enum si5351_pll_input ref_osc)
 ```
 ### si5351_write_bulk()
-```
+```cpp
 uint8_t Si5351::si5351_write_bulk(uint8_t addr, uint8_t bytes, uint8_t *data)
 ```
 ### si5351_write()
-```
+```cpp
 uint8_t Si5351::si5351_write(uint8_t addr, uint8_t data)
 ```
 ### si5351_read()
-```
+```cpp
 uint8_t Si5351::si5351_read(uint8_t addr)
 
 ```
