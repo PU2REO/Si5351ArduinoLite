@@ -29,7 +29,7 @@
 
 #include "Arduino.h"
 #include "Wire.h"
-#include "si5351_lite.h"
+#include "PU2REO_Si5351Lite.h"
 
 
 /********************/

@@ -18,7 +18,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "si5351.h"
+#include "PU2REO_Si5351Lite.h"
 #include "Wire.h"
 
 Si5351 si5351;

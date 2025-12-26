@@ -1,4 +1,4 @@
-Si5351A (10 MSOP - 3 Clocks Only) Lite Library for Arduino
+Si5351A (10 MSOP - 3 Clocks Only) Lite Library for Arduino (Former Si5351ArduinoLite)
 ==========================
 This is a library for the Si5351A (10 MSOP - 3 Clocks Only) series of clock generator ICs from [Skyworks Solutions](https://www.skyworksinc.com/) for the Arduino development environment. It will allow you to control the Si5351 with an Arduino, and without depending on the proprietary ClockBuilder software from SkyWorks (ex Silicon Labs).
 
@@ -12,7 +12,7 @@ If you would like to support my library development efforts, just give it a good
 
 Library Installation
 ---------------------
-Use ArduinoIDE Library Manager and search for Si5351ArduinoLite library.
+Use ArduinoIDE Library Manager and search for PU2REO_Si5351Lite library.
 
 Hardware Requirements and Setup
 -------------------------------
@@ -22,13 +22,13 @@ For the Si5351A 10 MSOP, I used one of that [cheap chinese plug and play modules
 
 Example
 -------
-First, install the Si5351ArduinoLite library into your instance of the Arduino IDE as described above.
+First, install the PU2REO_Si5351Lite library into your instance of the Arduino IDE as described above.
 
-There is a simple example named **si5351_example.ino** that is placed in your examples menu under the Si5351ArduinoLite folder. Open this to see how to initialize the Si5351 and set a couple of the outputs to different frequencies. The commentary below will analyze the sample sketch.
+There is a simple example named **si5351_example.ino** that is placed in your examples menu under the PU2REO_Si5351Lite folder. Open this to see how to initialize the Si5351 and set a couple of the outputs to different frequencies. The commentary below will analyze the sample sketch.
 
-Before you do anything with the Si5351, you will need to include the "si5351.h" and "Wire.h" header files and instantiate the Si5351 class.
+Before you do anything with the Si5351, you will need to include the "PU2REO_Si5351Lite.h" and "Wire.h" header files and instantiate the Si5351 class.
 ```cpp
-    #include "si5351_lite.h"
+    #include "PU2REO_Si5351Lite.h"
     #include "Wire.h"
 
     Si5351 si5351;
@@ -656,6 +656,10 @@ Thanks to...
 Changelog
 ---------
 
+* v1.3.0
+
+    * Library renaming (to match standards - Former Name: Si5351ArduinoLite)
+
 * v1.2.1
 
     * Minor descriptions and ReadMe text changes
@@ -682,7 +686,7 @@ Changelog
   [1]: https://www.skyworksinc.com/
   [2]: https://www.etherkit.com
 
-[![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/PU2REO/Si5351ArduinoLite/total)](https://img.shields.io/github/downloads/PU2REO/Si5351ArduinoLite/total)
+[![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/PU2REO/PU2REO_Si5351Lite/total)](https://img.shields.io/github/downloads/PU2REO/PU2REO_Si5351Lite/total)
 
 
 
